@@ -18,7 +18,7 @@ describe("a AddedThread entities", () => {
     // Arrange
     const payload = {
       id: "ini id",
-      title: 111,
+      title: 999,
       owner: "ini body",
     };
 
