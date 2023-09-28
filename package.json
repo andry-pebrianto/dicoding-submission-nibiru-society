@@ -12,6 +12,10 @@
     "migrate": "node-pg-migrate",
     "migrate:test": "node-pg-migrate -f config/database/test.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andry-pebrianto/dicoding-submission-nibiru-society.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

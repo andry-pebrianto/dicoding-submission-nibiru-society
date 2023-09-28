@@ -5,6 +5,7 @@ describe("a AddThread entities", () => {
     // Arrange
     const payload = {
       title: "ini title",
+      body: "ini body,"
     };
 
     // Action and Assert
@@ -18,6 +19,7 @@ describe("a AddThread entities", () => {
     const payload = {
       title: 999,
       body: "ini body",
+      owner: "ini owner"
     };
 
     // Action and Assert
@@ -31,13 +33,15 @@ describe("a AddThread entities", () => {
     const payload = {
       title: "ini title",
       body: "ini body",
+      owner: "ini owner"
     };
 
     // Action
-    const { title, body } = new AddThread(payload);
+    const { title, body, owner } = new AddThread(payload);
 
     // Assert
     expect(title).toEqual(payload.title);
     expect(body).toEqual(payload.body);
+    expect(owner).toEqual(payload.owner);
   });
 });
