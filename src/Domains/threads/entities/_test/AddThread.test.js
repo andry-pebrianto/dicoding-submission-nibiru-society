@@ -4,8 +4,8 @@ describe("a AddThread entities", () => {
   it("should throw error when payload did not contain needed property", () => {
     // Arrange
     const payload = {
-      title: "ini title",
-      body: "ini body,"
+      title: "thread example",
+      body: "lorem ipsum dolor sit amet",
     };
 
     // Action and Assert
@@ -18,8 +18,8 @@ describe("a AddThread entities", () => {
     // Arrange
     const payload = {
       title: 999,
-      body: "ini body",
-      owner: "ini owner"
+      body: "lorem ipsum dolor sit amet",
+      owner: "user-123",
     };
 
     // Action and Assert
@@ -31,9 +31,9 @@ describe("a AddThread entities", () => {
   it("should create addThread object correctly", () => {
     // Arrange
     const payload = {
-      title: "ini title",
-      body: "ini body",
-      owner: "ini owner"
+      title: "thread example",
+      body: "lorem ipsum dolor sit amet",
+      owner: "user-123",
     };
 
     // Action

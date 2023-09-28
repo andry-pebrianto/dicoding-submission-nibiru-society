@@ -4,10 +4,8 @@ describe("a DetailThread entities", () => {
   it("should throw error when payload did not contain needed property", () => {
     // Arrange
     const payload = {
-      id: "ini id",
-      title: "ini title",
-      body: "ini body",
-      date: "ini date",
+      id: "thread-999",
+      title: "thread-example",
     };
 
     // Action and Assert
@@ -19,11 +17,11 @@ describe("a DetailThread entities", () => {
   it("should throw error when payload did not meet data type specification", () => {
     // Arrange
     const payload = {
-      id: "ini id",
-      title: "ini title",
+      id: "thread-999",
+      title: "thread-example",
       body: 999,
-      date: "ini date",
-      username: "ini username",
+      date: new Date(),
+      username: "thread-username",
     };
 
     // Action and Assert
@@ -35,11 +33,11 @@ describe("a DetailThread entities", () => {
   it("should create detailThread object correctly", () => {
     // Arrange
     const payload = {
-      id: "ini id",
-      title: "ini title",
-      body: "ini body",
-      date: "ini date",
-      username: "ini username",
+      id: "thread-999",
+      title: "thread-example",
+      body: "lorem ipsum dolor sit amet",
+      date: new Date(),
+      username: "thread-owner-username",
     };
 
     // Action

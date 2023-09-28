@@ -4,8 +4,8 @@ describe("a AddedThread entities", () => {
   it("should throw error when payload did not contain needed property", () => {
     // Arrange
     const payload = {
-      id: "ini id",
-      title: "ini title",
+      id: "thread-999",
+      title: "thread example",
     };
 
     // Action and Assert
@@ -17,9 +17,9 @@ describe("a AddedThread entities", () => {
   it("should throw error when payload did not meet data type specification", () => {
     // Arrange
     const payload = {
-      id: "ini id",
+      id: "thread-999",
       title: 999,
-      owner: "ini body",
+      owner: "user-123",
     };
 
     // Action and Assert
@@ -31,9 +31,9 @@ describe("a AddedThread entities", () => {
   it("should create addedThread object correctly", () => {
     // Arrange
     const payload = {
-      id: "ini id",
-      title: "ini title",
-      owner: "ini body",
+      id: "thread-999",
+      title: "thread example",
+      owner: "user-123",
     };
 
     // Action

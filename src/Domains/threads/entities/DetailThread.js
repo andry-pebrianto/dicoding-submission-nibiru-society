@@ -1,5 +1,7 @@
 class DetailThread {
   constructor(payload) {
+    console.log(typeof payload.date);
+    console.log(payload.date);
     this._verifyPayload(payload);
 
     const { id, title, body, date, username } = payload;
@@ -20,7 +22,7 @@ class DetailThread {
       typeof id !== "string" ||
       typeof title !== "string" ||
       typeof body !== "string" ||
-      typeof date !== "string" ||
+      typeof date !== "object" ||
       typeof username !== "string"
     ) {
       throw new Error("DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION");
