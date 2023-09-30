@@ -28,21 +28,15 @@ describe("AddThreadUseCase", () => {
       .mockImplementation(() => Promise.resolve(mockAddedThread));
 
     // create thread use case
-    const getThreadUseCase = new AddThreadUseCase({
+    const addThreadUseCase = new AddThreadUseCase({
       threadRepository: mockThreadRepository,
     });
 
     // Action
-    const addedThread = await getThreadUseCase.execute(useCasePayload);
+    const addedThread = await addThreadUseCase.execute(useCasePayload);
 
     // Assert
-    expect(addedThread).toStrictEqual(
-      new AddedThread({
-        id: "ini id",
-        title: useCasePayload.title,
-        owner: useCasePayload.owner,
-      })
-    );
+    expect(addedThread).toStrictEqual(mockAddedThread);
 
     expect(mockThreadRepository.insertThread).toBeCalledWith(
       new AddThread(useCasePayload)
