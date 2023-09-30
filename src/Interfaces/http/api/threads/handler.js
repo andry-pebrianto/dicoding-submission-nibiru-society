@@ -26,7 +26,6 @@ class ThreadsHandler {
     response.code(201);
     return response;
   }
-
 }
 
 module.exports = ThreadsHandler;
