@@ -3,7 +3,7 @@ const pool = require("../src/Infrastructures/database/postgres/pool");
 
 const ThreadsTableTestHelper = {
   async addThread({
-    id = "thread-123",
+    id = "thread-999",
     title = "siapa pembunuh munir?",
     body = "pembunuh munir adalah... lihat selengkapnya...",
     owner = "user-123",
