@@ -1,12 +1,12 @@
 /* istanbul ignore file */
 const TokenJwtTestHelper = {
-  async getAccessToken(server) {
+  async getAccessToken(server, { username = "dicoding", password = "secret" }) {
     await server.inject({
       method: "POST",
       url: "/users",
       payload: {
-        username: "dicoding",
-        password: "secret",
+        username: username,
+        password: password,
         fullname: "Dicoding Indonesia",
       },
     });
@@ -15,10 +15,11 @@ const TokenJwtTestHelper = {
       method: "POST",
       url: "/authentications",
       payload: {
-        username: "dicoding",
-        password: "secret",
+        username: username,
+        password: password,
       },
     });
+
     const { accessToken } = JSON.parse(response.payload).data;
     return accessToken;
   },

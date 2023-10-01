@@ -29,7 +29,7 @@ describe("/threads endpoint", () => {
       const server = await createServer(container);
 
       // get jwt token
-      const jwtToken = await TokenJwtTestHelper.getAccessToken(server);
+      const jwtToken = await TokenJwtTestHelper.getAccessToken(server, {});
 
       // Action
       const response = await server.inject({
@@ -80,7 +80,7 @@ describe("/threads endpoint", () => {
       const server = await createServer(container);
 
       // get jwt token
-      const jwtToken = await TokenJwtTestHelper.getAccessToken(server);
+      const jwtToken = await TokenJwtTestHelper.getAccessToken(server, {});
 
       // Action
       const response = await server.inject({
@@ -112,7 +112,7 @@ describe("/threads endpoint", () => {
       const server = await createServer(container);
 
       // get jwt token
-      const jwtToken = await TokenJwtTestHelper.getAccessToken(server);
+      const jwtToken = await TokenJwtTestHelper.getAccessToken(server, {});
 
       // Action
       const response = await server.inject({
