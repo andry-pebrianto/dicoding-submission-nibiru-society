@@ -9,7 +9,7 @@ const CommentsTableTestHelper = {
     date = new Date(),
   }) {
     const query = {
-      text: "INSERT INTO comments(id,threadId,owner,content,date) VALUES($1,$2,$3,$4,$5)",
+      text: "INSERT INTO comments(id,thread_id,owner,content,date) VALUES($1,$2,$3,$4,$5)",
       values: [id, threadId, owner, content, date],
     };
 
