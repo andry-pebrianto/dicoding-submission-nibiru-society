@@ -57,5 +57,106 @@ describe("/comments endpoint", () => {
       expect(responseJson.status).toEqual("success");
       expect(responseJson.data.addedComment).toBeDefined();
     });
+
+    it("should response 401 when authentication (jwt) wrong", async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: "POST",
+        url: "/threads/thread-999/comments",
+        payload: {},
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(401);
+      expect(responseJson.error).toEqual("Unauthorized");
+    });
+
+    it("should response 400 when request payload not contain needed property", async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      // get jwt token
+      const jwtToken = await TokenJwtTestHelper.getAccessToken(server, {});
+
+      // Action
+      const response = await server.inject({
+        method: "POST",
+        url: "/threads/thread-999/comments",
+        payload: {},
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(400);
+      expect(responseJson.status).toEqual("fail");
+      expect(responseJson.message).toEqual(
+        "tidak dapat membuat komentar baru karena properti yang dibutuhkan tidak ada"
+      );
+    });
+
+    it("should response 400 when request payload not meet data type spec", async () => {
+      // Arrange
+      const payload = {
+        content: 777,
+      };
+
+      const server = await createServer(container);
+
+      // get jwt token
+      const jwtToken = await TokenJwtTestHelper.getAccessToken(server, {});
+
+      // Action
+      const response = await server.inject({
+        method: "POST",
+        url: "/threads/thread-999/comments",
+        payload: payload,
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(400);
+      expect(responseJson.status).toEqual("fail");
+      expect(responseJson.message).toEqual(
+        "tidak dapat membuat komentar baru karena tipe data tidak sesuai"
+      );
+    });
+
+    it("should response 404 when thread is not found", async () => {
+      // Arrange
+      const payload = {
+        content: "ini komentar",
+      };
+
+      const server = await createServer(container);
+
+      // get jwt token
+      const jwtToken = await TokenJwtTestHelper.getAccessToken(server, {});
+
+      // Action
+      const response = await server.inject({
+        method: "POST",
+        url: "/threads/thread-999/comments",
+        payload: payload,
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual("fail");
+      expect(responseJson.message).toEqual("thread tidak ditemukan");
+    });
   });
 });

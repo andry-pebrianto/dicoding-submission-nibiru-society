@@ -50,18 +50,13 @@ describe("/threads endpoint", () => {
 
     it("should response 401 when authentication (jwt) wrong", async () => {
       // Arrange
-      const payload = {
-        title: "title",
-        body: "some body",
-      };
-
       const server = await createServer(container);
 
       // Action
       const response = await server.inject({
         method: "POST",
         url: "/threads",
-        payload: payload,
+        payload: {},
       });
       const responseJson = JSON.parse(response.payload);
 
