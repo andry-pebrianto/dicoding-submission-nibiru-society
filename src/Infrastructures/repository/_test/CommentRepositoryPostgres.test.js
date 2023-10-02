@@ -59,7 +59,7 @@ describe("CommentRepositoryPostgres", () => {
     });
   });
 
-  describe("verifyAvailableCommentInThread function", () => {
+  describe("verifyAvailableComment function", () => {
     it("should return NotFoundError when comment is not available", async () => {
       // Arrange
       await UsersTableTestHelper.addUser({});
