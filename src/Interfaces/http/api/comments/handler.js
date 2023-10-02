@@ -33,8 +33,9 @@ class ThreadsHandler {
     return response;
   }
 
-  async deleteCommentByIdHandler(request) {
+  async deleteCommentByIdHandler(request, h) {
     const { threadId, commentId } = request.params;
+
     const payload = {
       commentId,
       threadId,
@@ -47,9 +48,11 @@ class ThreadsHandler {
 
     await deleteCommentUseCase.execute(payload);
 
-    return {
+    const response = h.response({
       status: "success",
-    };
+    });
+    response.code(200);
+    return response;
   }
 }
 

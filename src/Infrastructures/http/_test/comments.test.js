@@ -159,4 +159,110 @@ describe("/comments endpoint", () => {
       expect(responseJson.message).toEqual("thread tidak ditemukan");
     });
   });
+
+  describe("when DELETE /threads/{threadId}/comments/{commentId}", () => {
+    it("should response 200 and delete comment", async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      const { id, accessToken } = await TokenJwtTestHelper.getAccessToken(
+        server,
+        {},
+        true
+      );
+
+      // insert thread & comment with owner = id di atas
+      await ThreadsTableTestHelper.addThread({ owner: id });
+      await CommentsTableTestHelper.addComment({ owner: id });
+
+      // Action
+      const response = await server.inject({
+        method: "DELETE",
+        url: "/threads/thread-999/comments/comment-777",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual("success");
+    });
+
+    it("should response 401 when authentication (jwt) wrong", async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      // Ation
+      const response = await server.inject({
+        method: "DELETE",
+        url: "/threads/thread-999/comments/comment-777",
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(401);
+      expect(responseJson.error).toEqual("Unauthorized");
+    });
+
+    it("should response 404 when comment is not found", async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      const { id, accessToken } = await TokenJwtTestHelper.getAccessToken(
+        server,
+        {},
+        true
+      );
+
+      // insert thread with owner = id di atas
+      await ThreadsTableTestHelper.addThread({ owner: id });
+
+      // Action
+      const response = await server.inject({
+        method: "DELETE",
+        url: "/threads/thread-999/comments/comment-777",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual("fail");
+      expect(responseJson.message).toEqual("komentar tidak ditemukan");
+    });
+
+    it("should response 403 when user wasn't comment owner", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        username: "pemilik aseli komentar",
+      });
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({});
+
+      const server = await createServer(container);
+      // token bukan pemilik komentar
+      const accessToken = await TokenJwtTestHelper.getAccessToken(server, {});
+
+      // Action
+      const response = await server.inject({
+        method: "DELETE",
+        url: "/threads/thread-999/comments/comment-777",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(403);
+      expect(responseJson.status).toEqual("fail");
+      expect(responseJson.message).toEqual(
+        "anda tidak punya akses terhadap komentar ini"
+      );
+    });
+  });
 });

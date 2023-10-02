@@ -59,6 +59,45 @@ describe("CommentRepositoryPostgres", () => {
     });
   });
 
+  describe("verifyAvailableCommentInThread function", () => {
+    it("should return NotFoundError when comment is not available", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({});
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        () => {}
+      );
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.verifyAvailableComment(
+          "comment-666",
+          "thread-999"
+        )
+      ).rejects.toThrowError(NotFoundError);
+    });
+
+    it("should return nothing when comment are available", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({});
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        commentRepositoryPostgres.verifyAvailableComment(
+          "comment-777",
+          "thread-999"
+        )
+      ).resolves.not.toThrowError(NotFoundError);
+    });
+  });
+
   describe("verifyCommentOwner function", () => {
     it("should return AuthorizationError when user wasn't comment owner", async () => {
       // Arrange
@@ -66,7 +105,7 @@ describe("CommentRepositoryPostgres", () => {
       await ThreadsTableTestHelper.addThread({});
       await CommentsTableTestHelper.addComment({});
 
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => {});
 
       // Action & Assert
       await expect(
@@ -80,7 +119,7 @@ describe("CommentRepositoryPostgres", () => {
       await ThreadsTableTestHelper.addThread({});
       await CommentsTableTestHelper.addComment({});
 
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => {});
 
       // Action & Arrange
       await expect(
@@ -89,14 +128,17 @@ describe("CommentRepositoryPostgres", () => {
     });
   });
 
-  describe("deleteCommentById function", () => {
+  describe("softDeleteCommentById function", () => {
     it("should return NotFoundError when comment is not available", async () => {
       // Arrange
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        () => {}
+      );
 
       // Action & Assert
       await expect(
-        commentRepositoryPostgres.deleteCommentById("777")
+        commentRepositoryPostgres.softDeleteCommentById("777")
       ).rejects.toThrowError(NotFoundError);
     });
 
@@ -106,11 +148,14 @@ describe("CommentRepositoryPostgres", () => {
       await ThreadsTableTestHelper.addThread({});
       await CommentsTableTestHelper.addComment({});
 
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        () => {}
+      );
 
       // Action & Assert
       await expect(
-        commentRepositoryPostgres.deleteCommentById("comment-777")
+        commentRepositoryPostgres.softDeleteCommentById("comment-777")
       ).resolves.not.toThrowError(NotFoundError);
 
       const deletedComment = await CommentsTableTestHelper.findCommentById(

@@ -25,6 +25,18 @@ class CommentRepositoryPostgres extends CommentRepository {
     return new AddedComment(rows[0]);
   }
 
+  async verifyAvailableComment(id) {
+    const query = {
+      text: `SELECT id FROM comments WHERE id=$1 AND is_deleted=$2`,
+      values: [id, false],
+    };
+
+    const {rowCount} = await this._pool.query(query);
+    if (!rowCount) {
+      throw new NotFoundError('komentar tidak ditemukan');
+    }
+  }
+
   async verifyCommentOwner(id, owner) {
     const query = {
       text: "SELECT id FROM comments WHERE id=$1 AND owner=$2",
@@ -39,7 +51,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     }
   }
 
-  async deleteCommentById(id) {
+  async softDeleteCommentById(id) {
     const query = {
       text: "UPDATE comments SET is_deleted=$1 WHERE id=$2",
       values: [true, id],
