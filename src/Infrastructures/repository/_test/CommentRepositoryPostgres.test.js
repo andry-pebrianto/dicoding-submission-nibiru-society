@@ -105,7 +105,10 @@ describe("CommentRepositoryPostgres", () => {
       await ThreadsTableTestHelper.addThread({});
       await CommentsTableTestHelper.addComment({});
 
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        () => {}
+      );
 
       // Action & Assert
       await expect(
@@ -119,7 +122,10 @@ describe("CommentRepositoryPostgres", () => {
       await ThreadsTableTestHelper.addThread({});
       await CommentsTableTestHelper.addComment({});
 
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        () => {}
+      );
 
       // Action & Arrange
       await expect(
@@ -162,6 +168,85 @@ describe("CommentRepositoryPostgres", () => {
         "comment-777"
       );
       expect(deletedComment[0].is_deleted).toEqual(true);
+    });
+  });
+
+  describe("getCommentsByThreadId function", () => {
+    it("should return an empty array when thread haveZ no comment", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      const result = await commentRepositoryPostgres.getCommentsByThreadId(
+        "thread-777"
+      );
+
+      // Assert
+      expect(result).toStrictEqual([]);
+    });
+
+    it("should return all comments on thread", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+
+      // mock response
+      const mockComments = [
+        {
+          id: "comment-777",
+          date: new Date("2018-11-11"),
+          content: "Ini adalah komentar 1",
+          is_deleted: false,
+          username: "dicoding",
+        },
+        {
+          id: "comment-888",
+          date: new Date("2019-11-11"),
+          content: "Ini adalah komentar 2",
+          is_deleted: false,
+          username: "dicoding",
+        },
+        {
+          id: "comment-999",
+          date: new Date("2020-11-11"),
+          content: "Ini adalah komentar 3",
+          is_deleted: false,
+          username: "dicoding",
+        },
+      ];
+
+      // all comment request
+      const comment1 = {
+        id: "comment-777",
+        date: new Date("2018-11-11"),
+        content: "Ini adalah komentar 1",
+      };
+      const comment2 = {
+        id: "comment-888",
+        date: new Date("2019-11-11"),
+        content: "Ini adalah komentar 2",
+      };
+      const comment3 = {
+        id: "comment-999",
+        date: new Date("2020-11-11"),
+        content: "Ini adalah komentar 3",
+      };
+
+      await CommentsTableTestHelper.addComment(comment1);
+      await CommentsTableTestHelper.addComment(comment2);
+      await CommentsTableTestHelper.addComment(comment3);
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      const result = await commentRepositoryPostgres.getCommentsByThreadId(
+        "thread-999"
+      );
+
+      expect(result).toStrictEqual(mockComments);
     });
   });
 });

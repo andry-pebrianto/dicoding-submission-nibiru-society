@@ -31,9 +31,9 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [id, false],
     };
 
-    const {rowCount} = await this._pool.query(query);
+    const { rowCount } = await this._pool.query(query);
     if (!rowCount) {
-      throw new NotFoundError('komentar tidak ditemukan');
+      throw new NotFoundError("komentar tidak ditemukan");
     }
   }
 
@@ -61,6 +61,17 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       throw new NotFoundError("komentar tidak ditemukan");
     }
+  }
+
+  async getCommentsByThreadId(threadId) {
+    const query = {
+      text: `SELECT comments.id, users.username, comments.date, comments.content, comments.is_deleted FROM comments JOIN users ON users.id=comments.owner WHERE comments.thread_id=$1 ORDER BY comments.date`,
+      values: [threadId],
+    };
+
+    const { rows } = await this._pool.query(query);
+
+    return rows;
   }
 }
 
