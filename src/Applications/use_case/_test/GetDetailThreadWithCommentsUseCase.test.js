@@ -23,7 +23,7 @@ describe("GetDetailThreadWithCommentsUseCase", () => {
           id: "comment-777",
           username: "bambang",
           date: dateDummy,
-          content: "komentar telah dihapus",
+          content: "**komentar telah dihapus**",
         },
         {
           id: "comment-888",

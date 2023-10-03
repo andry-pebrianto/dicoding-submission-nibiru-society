@@ -62,6 +62,6 @@ describe("a DetailComment entities", () => {
     expect(payload2After.id).toEqual(payload2.id);
     expect(payload2After.username).toEqual(payload2.username);
     expect(payload2After.date).toEqual(payload2.date);
-    expect(payload2After.content).toEqual("komentar telah dihapus");
+    expect(payload2After.content).toEqual("**komentar telah dihapus**");
   });
 });
