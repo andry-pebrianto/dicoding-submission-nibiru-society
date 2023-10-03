@@ -128,4 +128,42 @@ describe("/threads endpoint", () => {
       );
     });
   });
+
+  describe("when GET /threads/{id}", () => {
+    it("should response 404 when thread is not found", async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: "GET",
+        url: "/threads/thread-999",
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual("fail");
+      expect(responseJson.message).toEqual("thread tidak ditemukan");
+    });
+
+    it("should response 200 and array of thread", async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await ThreadsTableTestHelper.addThread({});
+
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: "GET",
+        url: `/threads/thread-999`,
+      });
+      const responseJson = JSON.parse(response.payload);
+
+      // Assert
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.data.thread).toBeDefined();
+    });
+  });
 });
